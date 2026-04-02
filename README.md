@@ -256,14 +256,13 @@ pnpm run build
 
 `prepack` runs `build` before `npm publish`. For a full gate: `make release-check`.
 
-### Release (Changesets)
+### Release (tag → npm)
 
-1. After your feature PR is merged, add a changeset locally: `pnpm changeset` (pick bump level and write the note).
-2. Open a PR with the new `.changeset/*.md` file; merge to `main`.
-3. CI runs **`changesets/action`**: it opens a **“Version Packages”** PR that bumps `package.json` and updates `CHANGELOG.md`.
-4. Merge that PR. CI runs **`pnpm run release`** (`changeset publish`) and publishes to **npm** (needs **`NPM_TOKEN`** in repo secrets).
+1. Update **`CHANGELOG.md`** and bump **`version`** in `package.json` (or `npm version patch|minor|major`).
+2. Commit and push tag: `git tag v1.x.x && git push origin v1.x.x`.
+3. CI runs **`pnpm publish`** on tag push (needs **`NPM_TOKEN`** in repo secrets). `prepack` builds `dist/` first.
 
-Manual `npm version` / tag-based publish is not used; the changelog comes from Changesets.
+Optional: use **`pnpm dlx @changesets/cli`** to draft notes, then copy into `CHANGELOG.md` before tagging.
 
 ## License
 

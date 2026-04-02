@@ -16,7 +16,10 @@ const REGEX_PHONE_NUMBER =
 
 export type BrazilPhoneType = 'mobile' | 'linephone' | 'unknown'
 
-function classifyBrazilNational(ok: boolean, national: string): BrazilPhoneType {
+function classifyBrazilNational(
+  ok: boolean,
+  national: string,
+): BrazilPhoneType {
   if (!ok) {
     return 'unknown'
   }
