@@ -1,10 +1,10 @@
 import codes from './country.json' with { type: 'json' }
 
-import { INTERNAL_MASKS } from './masks.js'
+import { INTERNAL_MASKS } from './masks'
 
 const COUNTRY_BY_CALLING_CODE = codes as Record<string, string>
 
-export { getInternalDisplayMask, INTERNAL_MASKS } from './masks.js'
+export { getInternalDisplayMask, INTERNAL_MASKS } from './masks'
 
 export {
   bindInput,
@@ -16,7 +16,7 @@ export {
   fallback,
   type BindInputMaskMode,
   type MaskOptions,
-} from './functions.js'
+} from './functions'
 
 export type ParsedPhone = {
   /** ITU country calling code, e.g. "+55". */

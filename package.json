@@ -19,6 +19,15 @@
     "./browser": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.global.js"
+    },
+    "./br": {
+      "types": {
+        "import": "./dist/br.d.ts",
+        "require": "./dist/br.d.ts"
+      },
+      "import": "./dist/br.js",
+      "require": "./dist/br.cjs",
+      "default": "./dist/br.js"
     }
   },
   "files": [

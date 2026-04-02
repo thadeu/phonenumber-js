@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { maskModeFromElement } from './functions.js'
+import { maskModeFromElement } from './functions'
 import { digits, fallback, partial } from './index'
 
 function elWithMask(value: string | null): HTMLElement {

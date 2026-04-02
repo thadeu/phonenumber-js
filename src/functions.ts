@@ -1,4 +1,4 @@
-import { getInternalDisplayMask } from './masks.js'
+import { getInternalDisplayMask } from './masks'
 
 /** ITU calling code (e.g. `"+34"`) plus optional custom `x` mask. */
 export type MaskOptions = {

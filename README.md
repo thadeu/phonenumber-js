@@ -18,6 +18,8 @@ pnpm add @thadeu/phonenumber
 import phonenumber from '@thadeu/phonenumber'
 ```
 
+The package also exposes **`@thadeu/phonenumber/br`** — same parser plus Brazilian national validation, message keys, and optional i18n (see [§7](#7-brazil-module-br)).
+
 Builds: **ESM** and **CommonJS** (`import` / `require`), plus **IIFE** `dist/index.global.js` (global `Phonenumber`) for script tags.
 
 ---
@@ -167,6 +169,48 @@ $(() => {
 Other helpers (same import): **`digits`**, **`partial`**, **`fallback`**, **`getInternalDisplayMask`**, **`INTERNAL_MASKS`**.
 
 **IIFE** (`index.global.js`): `Phonenumber.default` (parser), `Phonenumber.bindInput`, `Phonenumber.bindInputMask`, `Phonenumber.unbindInputMask`, etc.
+
+### 7. Brazil module (`/br`)
+
+Import the **`br`** entry (not the root package) when you need **Brazil-only** rules on top of the core parser: valid DDD ranges, mobile vs landline length, and a shared regex for national numbers. Implementation lives under `src/locales/br/` (locale strings and `Locale` keys); `br.ts` wires parsing, validation, and re-exports.
+
+```ts
+import phonenumber, { Locale, defaultMessagesEn } from '@thadeu/phonenumber/br'
+```
+
+- **`phonenumber(input)`** — Runs the default parser, then if the resolved country is **`+55`**, runs Brazilian national validation (same rules everywhere — no separate validation API). Returns a **`BrazilPhone`**: `code`, `country`, `number`, **`valid()`**, **`isMobile()`**, **`isLinephone()`**, **`type()`** (returns **`'mobile'`**, **`'linephone'`**, or **`'unknown'`**), **`messages()`**, **`toString()`** / **`toLocaleString(mask?)`** (same masking behavior as the core `ParsedPhone`).
+
+- If parsing fails, or the number is not **`+55`**, **`valid()`** is `false` and **`messages()`** explains why (parse error, “not Brazilian”, or validation issues).
+
+- **`formatMessageRefs`** / **`translateMessage`** — Re-exported from the locale module if you build **`MessageRef`** lists yourself; most apps only need **`BrazilPhone#messages()`**.
+
+**Locales and translation**
+
+- **`Locale`** — Stable string keys for every message (e.g. `Locale.NOT_BRAZILIAN_NUMBER`, `Locale.NATIONAL_TOO_SHORT`). Use them as object keys when calling **`setLocale`**.
+
+- **`phonenumber.setLocale(localeId, partialMessages)`** — Sets the active locale id and merges translated strings. Unknown keys fall back to English defaults (`defaultMessagesEn`).
+
+- **`phonenumber.getLocale()`** — Returns the active locale id.
+
+- **`translateMessage(ref)`** — Resolves a single **`MessageRef`** with the current locale.
+
+Templates may use **`{{param}}`** placeholders (e.g. `Locale.PARSE_ERROR` uses `{{detail}}`, `Locale.SUBSCRIBER_BAD_START` uses `{{digit}}`).
+
+```ts
+phonenumber.setLocale('br', {
+  [Locale.NOT_BRAZILIAN_NUMBER]: 'Não é um número brasileiro',
+})
+
+const phone = phonenumber('+5511987654321')
+phone.valid()
+phone.isMobile()
+phone.messages()
+
+// reset catalog for the default locale in tests or after overrides:
+phonenumber.setLocale('en', { ...defaultMessagesEn })
+```
+
+**Note:** The **`br`** build is **ESM + CJS** only (no separate IIFE entry). Use a bundler or the root package’s IIFE if you need a single script tag without `br`.
 
 ---
 
