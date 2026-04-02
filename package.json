@@ -1,6 +1,6 @@
 {
   "name": "@thadeu/phonenumber",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Split a phone string into ITU country calling code and national number (longest-prefix match over digit prefixes).",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -63,6 +63,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "@eslint/js": "^10.0.1",
     "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",
