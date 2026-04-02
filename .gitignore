@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+*.log
+.DS_Store
+.eslintcache
+.env
+.env.*
+!.env.example
+.claude
+.env
