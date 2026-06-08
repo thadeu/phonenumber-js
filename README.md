@@ -22,6 +22,36 @@ The package also exposes **`@thadeu/phonenumber/br`** — same parser plus Brazi
 
 Builds: **ESM** and **CommonJS** (`import` / `require`), plus **IIFE** `dist/index.global.js` (global `Phonenumber`) for script tags.
 
+### TypeScript: `moduleResolution`
+
+This package ships its types through the `package.json` **`exports`** map, including subpaths like **`/br`**. TypeScript only resolves subpath exports when `moduleResolution` is `bundler`, `node16`, or `nodenext`. If your consuming project still uses the legacy `node` resolution you'll get:
+
+```
+Cannot find module '@thadeu/phonenumber/br' or its corresponding type declarations. ts(2307)
+```
+
+Fix it in your project's `tsconfig.json` with a compatible `module` / `moduleResolution` pair:
+
+```json
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
+  }
+}
+```
+
+```json
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  }
+}
+```
+
+`module` and `moduleResolution` must match: `bundler` pairs with `esnext` / `preserve`; `node16` / `nodenext` must pair with the same value for `module`.
+
 ---
 
 ## Features
@@ -177,6 +207,8 @@ Import the **`br`** entry (not the root package) when you need **Brazil-only** r
 ```ts
 import phonenumber, { Locale, defaultMessagesEn } from '@thadeu/phonenumber/br'
 ```
+
+> Importing the `/br` subpath requires `moduleResolution: "bundler" | "node16" | "nodenext"` in the consuming project — see [TypeScript: `moduleResolution`](#typescript-moduleresolution).
 
 - **`phonenumber(input)`** — Runs the default parser, then if the resolved country is **`+55`**, runs Brazilian national validation (same rules everywhere — no separate validation API). Returns a **`BrazilPhone`**: `code`, `country`, `number`, **`valid()`**, **`isMobile()`**, **`isLinephone()`**, **`type()`** (returns **`'mobile'`**, **`'linephone'`**, or **`'unknown'`**), **`messages()`**, **`toString()`** / **`toLocaleString(mask?)`** (same masking behavior as the core `ParsedPhone`).
 
